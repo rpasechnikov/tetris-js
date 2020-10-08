@@ -1,6 +1,10 @@
-function helloWorld(): string {
-  console.log('Hello world!');
-  return 'Hello world!';
+import { GameBoard } from './game-board';
+
+function main(): void {
+  console.log('Main!');
+
+  const gameBoard = new GameBoard();
+  gameBoard.init();
 }
 
-helloWorld();
+main();
