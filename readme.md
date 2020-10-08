@@ -11,10 +11,11 @@ http://www.javascripter.net/games/tetris/game.htm
 
 ## How to build/run
 
-1. Install TypeScript `npm i -g typescript`
-2. `npm run build` or `npm run serve`
-3. Open the index.html to run the game
-4. Enjoy! :)
+1. Install TypeScript `npm i -g typescript` (https://www.typescriptlang.org/docs/handbook/typescript-tooling-in-5-minutes.html)
+2. Install SASS `npm i -g sass` (https://sass-lang.com/install)
+3. `npm run build` or `npm run serve`
+4. Open the index.html to run the game
+5. Enjoy! :)
 
 ## Tooling
 
