@@ -1,8 +1,23 @@
-.game-board {
-  background: gray;
-  border: 1;
-}
+// Colours
+$light-grey: rgb(190, 190, 190);
+$grey: rgb(120, 120, 120);
+$dark-grey: rgb(70, 70, 70);
 
-.game-board .cell {
-  background: green;
+// Dimensions
+$pixel-size: 10px;
+
+.game-board {
+  height: $pixel-size * 20;
+  width: $pixel-size * 10;
+
+  background: $light-grey;
+  border: 1px solid $dark-grey;
+
+  .cell {
+    height: $pixel-size;
+    width: $pixel-size;
+
+    background: $grey;
+    border: 1px dotted $dark-grey;
+  }
 }

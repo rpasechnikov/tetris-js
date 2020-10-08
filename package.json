@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "sass src/:dist/ && tsc",
-    "serve": "sass src/:dist/ && tsc --watch"
+    "build": "sass src/:dist/ & tsc",
+    "serve": "sass && src/:dist/ & tsc --watch",
+    "serve-sass": "tsc && sass src/:dist/ --watch"
   },
   "author": "Rostislav Pasechnikov",
   "license": "ISC"
