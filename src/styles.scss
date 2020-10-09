@@ -3,21 +3,35 @@ $light-grey: rgb(190, 190, 190);
 $grey: rgb(120, 120, 120);
 $dark-grey: rgb(70, 70, 70);
 
+$light-blue: rgb(200, 200, 255);
+$blue: rgb(130, 130, 255);
+$dark-blue: rgb(50, 50, 255);
+
 // Dimensions
-$pixel-size: 10px;
+$pixel-size: 20px;
+$border-thickness: 1px;
 
 .game-board {
   height: $pixel-size * 20;
   width: $pixel-size * 10;
 
   background: $light-grey;
-  border: 1px solid $dark-grey;
+  border: $border-thickness solid $dark-grey;
+
+  display: block;
 
   .cell {
-    height: $pixel-size;
-    width: $pixel-size;
+    height: $pixel-size - ($border-thickness * 2);
+    width: $pixel-size - ($border-thickness * 2);
 
     background: $grey;
-    border: 1px dotted $dark-grey;
+    border: $border-thickness dashed $dark-grey;
+
+    display: inline-block;
+
+    &:hover {
+      background: $light-blue;
+      border-color: $dark-blue;
+    }
   }
 }
