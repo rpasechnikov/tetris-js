@@ -14,7 +14,11 @@ export function millisecondsToHoursMinutesSeconds(value: number): string {
   const hours = Math.abs(Math.floor((value / (60 * 60 * 1000)) % 24)) - 1;
   const hoursAdjusted = hours < 0 ? 0 : hours;
 
-  return `${hoursAdjusted}:${minutesAdjusted}:${seconds}`;
+  const secondsString = seconds < 10 ? `0${seconds}` : seconds;
+  const minutesString = minutesAdjusted < 10 ? `0${minutesAdjusted}` : minutesAdjusted;
+  const hoursString = hoursAdjusted < 10 ? `0${hoursAdjusted}` : hoursAdjusted;
+
+  return `${hoursString}:${minutesString}:${secondsString}`;
 }
 
 export function currentTimeMsToHoursMinutesSecondsSince(start: number): string {
