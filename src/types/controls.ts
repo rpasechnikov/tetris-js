@@ -1,8 +1,8 @@
-import { Initializable } from './interfaces/initializable';
-import { Updatable } from './interfaces/updatable';
-import { currentTimeMsToHoursMinutesSecondsSince, numberToString } from './utils/string-utils';
+import { Initializable } from 'src/interfaces/initializable';
+import { Updatable } from 'src/interfaces/updatable';
+import { currentTimeMsToHoursMinutesSecondsSince } from '../utils/string-utils';
 
-export class GameControls implements Initializable, Updatable {
+export class Controls implements Initializable, Updatable {
   private _timerDiv: Element;
   private _startingMs: number;
 

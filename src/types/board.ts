@@ -1,7 +1,7 @@
-import { Initializable } from './interfaces/initializable';
-import { Updatable } from './interfaces/updatable';
+import { Initializable } from 'src/interfaces/initializable';
+import { Updatable } from 'src/interfaces/updatable';
 
-export class GameBoard implements Initializable, Updatable {
+export class Board implements Initializable, Updatable {
   private readonly _boardHeight = 20;
   private readonly _boardWidth = 10;
   private _gameBoard: Element;

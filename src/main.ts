@@ -1,12 +1,12 @@
-import { GameBoard } from './game-board';
-import { GameControls } from './game-controls';
 import { Updatable } from './interfaces/updatable';
+import { Board } from './types/board';
+import { Controls } from './types/controls';
 
 main();
 
 function main(): void {
-  const gameControls = new GameControls();
-  const gameBoard = new GameBoard();
+  const gameControls = new Controls();
+  const gameBoard = new Board();
 
   const updatableControls: Updatable[] = [gameControls, gameBoard];
 
