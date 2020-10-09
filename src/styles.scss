@@ -11,27 +11,35 @@ $dark-blue: rgb(50, 50, 255);
 $pixel-size: 20px;
 $border-thickness: 1px;
 
-.game-board {
-  height: $pixel-size * 20;
-  width: $pixel-size * 10;
+.main-container {
+  display: flex;
 
-  background: $light-grey;
-  border: $border-thickness solid $dark-grey;
+  .game-board {
+    height: $pixel-size * 20;
+    width: $pixel-size * 10;
 
-  display: block;
+    background: $light-grey;
+    border: $border-thickness solid $dark-grey;
 
-  .cell {
-    height: $pixel-size - ($border-thickness * 2);
-    width: $pixel-size - ($border-thickness * 2);
+    display: block;
 
-    background: $grey;
-    border: $border-thickness dashed $dark-grey;
+    .cell {
+      height: $pixel-size - ($border-thickness * 2);
+      width: $pixel-size - ($border-thickness * 2);
 
-    display: inline-block;
+      background: $grey;
+      border: $border-thickness dashed $dark-grey;
 
-    &:hover {
-      background: $light-blue;
-      border-color: $dark-blue;
+      display: inline-block;
+
+      &:hover {
+        background: $light-blue;
+        border-color: $dark-blue;
+      }
     }
+  }
+
+  .controls {
+    margin-left: $pixel-size;
   }
 }

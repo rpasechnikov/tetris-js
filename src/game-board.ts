@@ -1,4 +1,7 @@
-export class GameBoard {
+import { Initializable } from './interfaces/initializable';
+import { Updatable } from './interfaces/updatable';
+
+export class GameBoard implements Initializable, Updatable {
   private readonly _boardHeight = 20;
   private readonly _boardWidth = 10;
   private _gameBoard: Element;
@@ -8,6 +11,8 @@ export class GameBoard {
 
     this.render();
   }
+
+  update(): void {}
 
   private render(): void {
     for (var i = 0; i < this._boardHeight * this._boardWidth; i++) {
