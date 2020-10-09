@@ -9,11 +9,11 @@
     "outDir": "./dist/",
     "sourceMap": true,
     "declaration": false,
-    "module": "esnext",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2015",
+    "target": "es5",
+    "module": "es6",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2018", "dom"]
   }
