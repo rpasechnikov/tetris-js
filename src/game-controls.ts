@@ -10,7 +10,7 @@ export class GameControls implements Initializable, Updatable {
     this._timerDiv = document.getElementsByClassName('timer')[0];
     this._startingMs = new Date().getTime();
 
-    this._timerDiv.innerHTML = numberToString(0);
+    this.update();
   }
 
   update(): void {
