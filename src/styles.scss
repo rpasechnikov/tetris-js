@@ -31,10 +31,19 @@ $border-thickness: 1px;
       border: $border-thickness dashed $dark-grey;
 
       display: inline-block;
+      font-size: 9px;
 
       &:hover {
         background: $light-blue;
         border-color: $dark-blue;
+      }
+
+      .x {
+        color: yellow;
+      }
+
+      .y {
+        color: orange;
       }
     }
   }
