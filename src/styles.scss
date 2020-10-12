@@ -1,4 +1,5 @@
 // Colours
+$very-light-grey: rgb(224, 224, 224);
 $light-grey: rgb(190, 190, 190);
 $grey: rgb(120, 120, 120);
 $dark-grey: rgb(70, 70, 70);
@@ -29,8 +30,8 @@ $border-thickness: 1px;
       height: $pixel-size - ($border-thickness * 2);
       width: $pixel-size - ($border-thickness * 2);
 
-      background: $grey;
-      border: $border-thickness solid $dark-grey;
+      background: $very-light-grey;
+      border: $border-thickness solid $light-grey;
       // box-shadow: inset 1px 1px 1px $light-blue;
 
       display: flex;
@@ -42,22 +43,50 @@ $border-thickness: 1px;
       &:hover {
         background: $light-blue;
         border-color: $dark-blue;
-      }
 
-      &.red {
-        background-color: red;
+        cursor: pointer;
       }
 
       &.black {
         background-color: rgb(10, 10, 50);
       }
 
+      &.dark-blue {
+        background-color: rgb(44, 44, 218);
+      }
+
+      &.green {
+        background-color: rgb(0, 131, 0);
+      }
+
+      &.light-blue {
+        background-color: lightblue;
+      }
+
+      &.orange {
+        background-color: rgb(214, 140, 3);
+      }
+
+      &.pink {
+        background-color: rgb(163, 45, 157);
+      }
+
+      &.red {
+        background-color: rgb(180, 0, 0);
+      }
+
+      &.yellow {
+        background-color: rgb(241, 241, 0);
+      }
+
       .x {
-        color: yellow;
+        // color: yellow;
+        color: transparent;
       }
 
       .y {
-        color: orange;
+        // color: orange;
+        color: transparent;
       }
     }
   }

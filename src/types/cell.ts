@@ -18,6 +18,10 @@ export class Cell implements Initializable {
     return this._state;
   }
 
+  get colour(): Colour {
+    return this._colour;
+  }
+
   constructor(element: Element, location: Vector2, colour: Colour = null) {
     this._element = element;
     this._colour = colour;
@@ -29,19 +33,23 @@ export class Cell implements Initializable {
     this._element.addEventListener('click', (e: MouseEvent) => this.onClick(e));
   }
 
-  activate(): void {
+  activate(colour?: Colour): void {
     this._state = CellState.Active;
-    this.setColour(Colour.Red);
+
+    if (!!colour) {
+      this.setColour(colour);
+    } else {
+      this.setColour(this.getRandomColour());
+    }
   }
 
   deActivate(): void {
     this._state = CellState.Passive;
-    this.setColour(Colour.Black);
   }
 
   clear(): void {
     this._state = CellState.Empty;
-    this.unsetColour(Colour.Red);
+    this.unsetColour(this._colour);
   }
 
   private onClick(_: MouseEvent): void {
@@ -54,11 +62,11 @@ export class Cell implements Initializable {
   }
 
   private unsetColour(colour: Colour): void {
-    this._colour = null;
     this._element.classList.remove(COLOURS.get(colour));
+    this._colour = null;
   }
 
   private getRandomColour(): Colour {
-    return Math.floor(Math.random() * 16) as Colour;
+    return Math.floor(Math.random() * Colour.Black) as Colour;
   }
 }

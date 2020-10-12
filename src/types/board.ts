@@ -42,19 +42,16 @@ export class Board implements Initializable, Updatable {
     for (const activeCell of this._activeCells) {
       if (activeCell.location.y == 0) {
         // If this cell is at the bottom of the board - de-activate it
-        activeCell.clear();
         activeCell.deActivate();
       } else if (this._cells[activeCell.location.y - 1][activeCell.location.x].state === CellState.Empty) {
         // Otherwise if this cell has an empty cell below, move it down
-        activeCell.clear();
-
         const newActiveCell = this._cells[activeCell.location.y - 1][activeCell.location.x];
-        newActiveCell.activate();
+        newActiveCell.activate(activeCell.colour);
+        activeCell.clear();
 
         newActiveCells.push(newActiveCell);
       } else {
         // Lastly - simply deactivate this cell as it cannot be moved down, due to a cell below
-        activeCell.clear();
         activeCell.deActivate();
       }
     }
