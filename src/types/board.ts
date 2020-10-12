@@ -1,13 +1,16 @@
 import { CellState } from '../enums';
 import { Initializable, Updatable, Vector2 } from '../interfaces';
 import { Cell } from './cell';
+import { Shape } from './shape';
 
 export class Board implements Initializable, Updatable {
   private readonly _boardHeight = 20;
   private readonly _boardWidth = 10;
   private _gameBoard: Element;
 
-  /** Cells stored in Y-X format */
+  /** Cells stored in Y-X format starting with 19, 0 at top left and
+   * ending with 0,9 at bottom right
+   */
   private _cells: Cell[][];
 
   private _activeCells: Cell[];
@@ -19,7 +22,14 @@ export class Board implements Initializable, Updatable {
     this.spawnActivePixel();
   }
 
-  spawnActivePixel() {
+  spawnActiveShape(): void {
+    const spawnLocation: Vector2 = { y: 19, x: 3 };
+    const shape = new Shape();
+
+    shape.init();
+  }
+
+  spawnActivePixel(): void {
     const spawnLocation = this.getRandomSpawnLocation();
     const cellToActivate = this._cells[spawnLocation.y][spawnLocation.x];
     cellToActivate.activate();
@@ -68,7 +78,7 @@ export class Board implements Initializable, Updatable {
       for (var x = 0; x < this._boardWidth; x++) {
         var cellElement = document.createElement('div');
         cellElement.className = 'cell';
-        cellElement.innerHTML = `<div class="x">${x}</div>&nbsp;<div class="y">${y}</div>`;
+        cellElement.innerHTML = `<div class="y">${y}</div>&nbsp;<div class="x">${x}</div>`;
 
         this._gameBoard.appendChild(cellElement);
 

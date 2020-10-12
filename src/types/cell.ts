@@ -2,6 +2,7 @@ import { Initializable, Vector2 } from '../interfaces';
 import { CellState } from '../enums';
 import { Colour } from '../enums/colour';
 import { COLOURS } from '../constants';
+import { getRandomColour } from '../utils';
 
 /** Represents a 'cell' that could be a shape or an empty cell */
 export class Cell implements Initializable {
@@ -30,7 +31,9 @@ export class Cell implements Initializable {
   }
 
   init(): void {
-    this._element.addEventListener('click', (e: MouseEvent) => this.onClick(e));
+    if (!!this._element) {
+      this._element.addEventListener('click', (e: MouseEvent) => this.onClick(e));
+    }
   }
 
   activate(colour?: Colour): void {
@@ -39,7 +42,7 @@ export class Cell implements Initializable {
     if (!!colour) {
       this.setColour(colour);
     } else {
-      this.setColour(this.getRandomColour());
+      this.setColour(getRandomColour());
     }
   }
 
@@ -58,15 +61,17 @@ export class Cell implements Initializable {
 
   private setColour(colour: Colour): void {
     this._colour = colour;
-    this._element.classList.add(COLOURS.get(colour));
+
+    if (!!this._element) {
+      this._element.classList.add(COLOURS.get(colour));
+    }
   }
 
   private unsetColour(colour: Colour): void {
-    this._element.classList.remove(COLOURS.get(colour));
-    this._colour = null;
-  }
+    if (!!this._element) {
+      this._element.classList.remove(COLOURS.get(colour));
+    }
 
-  private getRandomColour(): Colour {
-    return Math.floor(Math.random() * Colour.Black) as Colour;
+    this._colour = null;
   }
 }
