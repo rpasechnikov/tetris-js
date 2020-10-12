@@ -71,7 +71,7 @@ export class Board implements Initializable, Updatable {
       for (var x = 0; x < this._boardWidth; x++) {
         var cellElement = document.createElement('div');
         cellElement.className = 'cell';
-        cellElement.innerHTML = `<span class="x">${x}</span><span class="y">${y}</span>`;
+        cellElement.innerHTML = `<div class="x">${x}</div><div class="y">${y}</div>`;
 
         this._gameBoard.appendChild(cellElement);
 
