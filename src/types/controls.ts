@@ -1,5 +1,4 @@
-import { Initializable } from 'src/interfaces/initializable';
-import { Updatable } from 'src/interfaces/updatable';
+import { Initializable, Updatable } from '../interfaces';
 import { currentTimeMsToHoursMinutesSecondsSince } from '../utils/string-utils';
 
 export class Controls implements Initializable, Updatable {
