@@ -38,6 +38,14 @@ $border-thickness: 1px;
         border-color: $dark-blue;
       }
 
+      &.red {
+        background-color: red;
+      }
+
+      &.black {
+        background-color: black;
+      }
+
       .x {
         color: yellow;
       }

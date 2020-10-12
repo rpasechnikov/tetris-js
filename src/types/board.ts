@@ -1,3 +1,4 @@
+import { CellState } from '../enums';
 import { Initializable, Updatable, Vector2 } from '../interfaces';
 import { Cell } from './cell';
 
@@ -19,7 +20,8 @@ export class Board implements Initializable, Updatable {
   }
 
   spawnActivePixel() {
-    const cellToActivate = this._cells[this._boardHeight - 1][4];
+    const spawnLocation = this.getRandomSpawnLocation();
+    const cellToActivate = this._cells[spawnLocation.y][spawnLocation.x];
     cellToActivate.activate();
 
     this._activeCells = [];
@@ -29,6 +31,8 @@ export class Board implements Initializable, Updatable {
   update(): void {
     if (!!this._activeCells && !!this._activeCells.length) {
       this.updateActiveCells();
+    } else {
+      this.spawnActivePixel();
     }
   }
 
@@ -36,10 +40,23 @@ export class Board implements Initializable, Updatable {
     const newActiveCells: Cell[] = [];
 
     for (const activeCell of this._activeCells) {
-      const activeCellLocation: Vector2 = { x: activeCell.location.x, y: activeCell.location.y };
-      activeCell.clear();
+      if (activeCell.location.y == 0) {
+        // If this cell is at the bottom of the board - de-activate it
+        activeCell.clear();
+        activeCell.deActivate();
+      } else if (this._cells[activeCell.location.y - 1][activeCell.location.x].state === CellState.Empty) {
+        // Otherwise if this cell has an empty cell below, move it down
+        activeCell.clear();
 
-      newActiveCells.push(this._cells[activeCellLocation.y][activeCellLocation.x]);
+        const newActiveCell = this._cells[activeCell.location.y - 1][activeCell.location.x];
+        newActiveCell.activate();
+
+        newActiveCells.push(newActiveCell);
+      } else {
+        // Lastly - simply deactivate this cell as it cannot be moved down, due to a cell below
+        activeCell.clear();
+        activeCell.deActivate();
+      }
     }
 
     this._activeCells = newActiveCells;
@@ -64,5 +81,11 @@ export class Board implements Initializable, Updatable {
         this._cells[y][x] = cell;
       }
     }
+  }
+
+  private getRandomSpawnLocation(): Vector2 {
+    const x = Math.floor(Math.random() * 10);
+
+    return { x, y: this._boardHeight - 1 };
   }
 }

@@ -5,6 +5,7 @@ import { Controls } from './types/controls';
 main();
 
 function main(): void {
+  const timestepMs = 100;
   const gameControls = new Controls();
   const gameBoard = new Board();
 
@@ -13,7 +14,7 @@ function main(): void {
   gameControls.init();
   gameBoard.init();
 
-  setInterval(doTimestep, 1000, updatableControls);
+  setInterval(doTimestep, timestepMs, updatableControls);
 }
 
 function doTimestep(updatableControls: Updatable[]): void {
