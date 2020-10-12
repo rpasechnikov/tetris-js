@@ -8,7 +8,7 @@ $blue: rgb(130, 130, 255);
 $dark-blue: rgb(50, 50, 255);
 
 // Dimensions
-$pixel-size: 20px;
+$pixel-size: 30px;
 $border-thickness: 1px;
 
 .main-container {
@@ -30,7 +30,8 @@ $border-thickness: 1px;
       width: $pixel-size - ($border-thickness * 2);
 
       background: $grey;
-      border: $border-thickness dashed $dark-grey;
+      border: $border-thickness solid $dark-grey;
+      // box-shadow: inset 1px 1px 1px $light-blue;
 
       display: flex;
       align-items: center;
@@ -48,7 +49,7 @@ $border-thickness: 1px;
       }
 
       &.black {
-        background-color: black;
+        background-color: rgb(10, 10, 50);
       }
 
       .x {
