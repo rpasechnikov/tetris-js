@@ -19,7 +19,7 @@ $border-thickness: 1px;
     height: $pixel-size * 20;
     width: $pixel-size * 10;
 
-    background: $light-grey;
+    background: $very-light-grey;
     border: $border-thickness solid $dark-grey;
 
     display: flex;
@@ -30,8 +30,9 @@ $border-thickness: 1px;
       height: $pixel-size - ($border-thickness * 2);
       width: $pixel-size - ($border-thickness * 2);
 
-      background: $very-light-grey;
-      border: $border-thickness solid $light-grey;
+      background: $light-grey;
+      border: $border-thickness solid $very-light-grey;
+      border-radius: 4px;
       // box-shadow: inset 1px 1px 1px $light-blue;
 
       display: flex;
@@ -79,14 +80,21 @@ $border-thickness: 1px;
         background-color: rgb(241, 241, 28);
       }
 
-      .x {
-        // color: yellow;
-        color: transparent;
-      }
+      .cell-inner {
+        border: 4px solid $very-light-grey;
+        border-radius: 2px;
+        padding: 8px;
+        display: flex;
 
-      .y {
-        // color: orange;
-        color: transparent;
+        .x {
+          // color: yellow;
+          color: transparent;
+        }
+
+        .y {
+          // color: orange;
+          color: transparent;
+        }
       }
     }
   }
