@@ -26,7 +26,7 @@ export class Cell implements Initializable {
   }
 
   get shape(): Shape {
-    return this.shape;
+    return this._shape;
   }
 
   constructor(element: Element, location: Vector2, colour: Colour = null, shape: Shape = null) {
@@ -43,18 +43,15 @@ export class Cell implements Initializable {
     }
   }
 
-  activate(colour?: Colour): void {
+  activate(colour: Colour, shape: Shape): void {
     this._state = CellState.Active;
-
-    if (!!colour) {
-      this.setColour(colour);
-    } else {
-      this.setColour(getRandomColour());
-    }
+    this._shape = shape;
+    this.setColour(colour);
   }
 
   deActivate(): void {
     this._state = CellState.Passive;
+    this._shape = null;
   }
 
   clear(): void {

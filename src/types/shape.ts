@@ -1,5 +1,5 @@
 import { Initializable, Vector2 } from '../interfaces';
-import { Colour, ShapeRotation, ShapeType } from '../enums';
+import { Colour, Direction, ShapeRotation, ShapeType } from '../enums';
 import { Cell } from './cell';
 import { SHAPE_ROTATION_CELL_LOCATIONS } from '../constants';
 import { getRandomColour } from '../utils';
@@ -13,7 +13,7 @@ export class Shape implements Initializable {
   private _cells: Cell[];
   private _shapeType: ShapeType;
   private _shapeRotation: ShapeRotation;
-  private _shapeColour: Colour;
+  private _colour: Colour;
   private _location: Vector2;
 
   get cellMap(): Cell[][] {
@@ -26,6 +26,10 @@ export class Shape implements Initializable {
 
   get location(): Vector2 {
     return this._location;
+  }
+
+  get colour(): Colour {
+    return this._colour;
   }
 
   /** Location of the top left cell of this shape */
@@ -41,7 +45,7 @@ export class Shape implements Initializable {
     this._cells = [];
 
     this._shapeType = ShapeType.O;
-    this._shapeColour = getRandomColour();
+    this._colour = getRandomColour();
 
     const cellLocations = SHAPE_ROTATION_CELL_LOCATIONS.get(this._shapeType);
 
@@ -50,11 +54,21 @@ export class Shape implements Initializable {
 
       for (var x = 0; x < 4; x++) {
         if (!!cellLocations[y][x]) {
-          const cell = new Cell(null, { x, y }, this._shapeColour);
+          const cell = new Cell(null, { x, y }, this._colour, this);
           this._cellMap[y][x] = cell;
           this.cells.push(cell);
         }
       }
+    }
+  }
+
+  move(direction: Direction): void {
+    if (direction === Direction.Left) {
+      // TODO
+    } else if (direction === Direction.Right) {
+      // TODO
+    } else {
+      this._location.y--;
     }
   }
 }
