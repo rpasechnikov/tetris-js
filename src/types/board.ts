@@ -1,4 +1,4 @@
-import { getRandomColour } from '../utils';
+import { canShapeMoveInDirection, getRandomColour, shapeToBoardCellLocation } from '../utils';
 import { CellState, Colour, Direction } from '../enums';
 import { Initializable, Updatable, Vector2 } from '../interfaces';
 import { Cell } from './cell';
@@ -37,22 +37,24 @@ export class Board implements Initializable, Updatable {
   }
 
   private onKeyDown(e: KeyboardEvent): void {
-    let requireReRender = false;
-
     if (e.key === 'a' || e.key == 'ArrowLeft') {
-      this._activeShape.move(Direction.Left);
-      requireReRender = true;
+      this.moveShapeInDirectionIfPossible(this._activeShape, Direction.Left);
     } else if (e.key === 'd' || e.key === 'ArrowRight') {
-      this._activeShape.move(Direction.Right);
-      requireReRender = true;
+      this.moveShapeInDirectionIfPossible(this._activeShape, Direction.Right);
     } else if (e.key === 's' || e.key === 'ArrowDown') {
-      this._activeShape.move(Direction.Down);
-      requireReRender = true;
+      this.moveShapeInDirectionIfPossible(this._activeShape, Direction.Down);
+    }
+  }
+
+  private moveShapeInDirectionIfPossible(shape: Shape, direction: Direction): void {
+    // Check if movement is possible
+    if (!canShapeMoveInDirection(this._cells, shape, direction)) {
+      return;
     }
 
-    if (requireReRender) {
-      this.renderShape(this._activeShape);
-    }
+    // Move shape and re-render
+    shape.move(direction);
+    this.renderShape(shape);
   }
 
   private spawnActiveShape(): void {
@@ -60,15 +62,6 @@ export class Board implements Initializable, Updatable {
     this._activeShape = new Shape(spawnLocation);
     this._activeShape.init();
     this.renderShape(this._activeShape);
-  }
-
-  private spawnActivePixel(): void {
-    const spawnLocation = this.getRandomSpawnLocation();
-    const cellToActivate = this._cells[spawnLocation.y][spawnLocation.x];
-    cellToActivate.activate(getRandomColour(), null);
-
-    this._activeCells = [];
-    this._activeCells.push(cellToActivate);
   }
 
   private updateActiveShape(): void {
@@ -90,40 +83,9 @@ export class Board implements Initializable, Updatable {
     // Otherwise - de-activate relevant shapes and destroy the shape
   }
 
-  /** Returns the cell location on the board, calculated from cell location within the shape.
-   * Basically translates local to world coordinates
-   */
-  private shapeToBoardCellLocation(localCellLocation: Vector2, shapeLocation: Vector2): Vector2 {
-    return {
-      y: shapeLocation.y - localCellLocation.y,
-      x: shapeLocation.x + localCellLocation.x
-    };
-  }
-
   private updateShapeLocation(shape: Shape): boolean {
-    let canMoveDown: boolean = true;
-
-    // Are there any cells right under this cell's bottom-most pixels
-    for (const shapeCell of shape.cells) {
-      const cellWorldLocation = this.shapeToBoardCellLocation(shapeCell.location, this._activeShape.location);
-
-      // Already at the bottom of the board
-      if (cellWorldLocation.y < 1) {
-        canMoveDown = false;
-        break;
-      }
-
-      const cellBelow = this._cells[cellWorldLocation.y - 1][cellWorldLocation.x];
-
-      // Another non-empty cell below
-      if (!cellBelow.shape && cellBelow.state !== CellState.Empty) {
-        canMoveDown = false;
-        break;
-      }
-    }
-
-    if (!canMoveDown) {
-      return false;
+    if (!canShapeMoveInDirection(this._cells, shape, Direction.Down)) {
+      return;
     }
 
     shape.move(Direction.Down);
@@ -142,35 +104,12 @@ export class Board implements Initializable, Updatable {
 
     // Render shape and update active cells
     for (const shapeCell of this._activeShape.cells) {
-      const cellWorldLocation = this.shapeToBoardCellLocation(shapeCell.location, this._activeShape.location);
+      const cellWorldLocation = shapeToBoardCellLocation(shapeCell.location, this._activeShape.location);
       const cell = this._cells[cellWorldLocation.y][cellWorldLocation.x];
 
       this._activeCells.push(cell);
       cell.activate(shape.colour, shape);
     }
-  }
-
-  private updateActiveCells(): void {
-    const newActiveCells: Cell[] = [];
-
-    for (const activeCell of this._activeCells) {
-      if (activeCell.location.y == 0) {
-        // If this cell is at the bottom of the board - de-activate it
-        activeCell.deActivate();
-      } else if (this._cells[activeCell.location.y - 1][activeCell.location.x].state === CellState.Empty) {
-        // Otherwise if this cell has an empty cell below, move it down
-        const newActiveCell = this._cells[activeCell.location.y - 1][activeCell.location.x];
-        newActiveCell.activate(activeCell.colour, null);
-        activeCell.clear();
-
-        newActiveCells.push(newActiveCell);
-      } else {
-        // Lastly - simply deactivate this cell as it cannot be moved down, due to a cell below
-        activeCell.deActivate();
-      }
-    }
-
-    this._activeCells = newActiveCells;
   }
 
   private renderCells(): void {
@@ -192,11 +131,5 @@ export class Board implements Initializable, Updatable {
         this._cells[y][x] = cell;
       }
     }
-  }
-
-  private getRandomSpawnLocation(): Vector2 {
-    const x = Math.floor(Math.random() * 10);
-
-    return { x, y: this._boardHeight - 1 };
   }
 }
