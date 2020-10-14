@@ -21,6 +21,7 @@ export class Board implements Initializable, Updatable {
     this._gameBoard = document.getElementsByClassName('game-board')[0];
 
     this.renderCells();
+    this.update();
   }
 
   update(): void {
@@ -34,9 +35,10 @@ export class Board implements Initializable, Updatable {
   }
 
   spawnActiveShape(): void {
-    const spawnLocation: Vector2 = { y: 19, x: 3 };
+    const spawnLocation: Vector2 = { y: 20, x: 3 };
     this._activeShape = new Shape(spawnLocation);
     this._activeShape.init();
+    this.renderShape(this._activeShape);
   }
 
   spawnActivePixel(): void {

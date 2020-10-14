@@ -5,7 +5,7 @@ import { Controls } from './types/controls';
 main();
 
 function main(): void {
-  const timestepMs = 200;
+  const timestepMs = 400;
   const gameControls = new Controls();
   const gameBoard = new Board();
 
