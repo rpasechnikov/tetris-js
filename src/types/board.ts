@@ -47,6 +47,10 @@ export class Board implements Initializable, Updatable {
   }
 
   private moveShapeInDirectionIfPossible(shape: Shape, direction: Direction): void {
+    if (!shape) {
+      return;
+    }
+
     // Check if movement is possible
     if (!canShapeMoveInDirection(this._cells, shape, direction)) {
       return;
