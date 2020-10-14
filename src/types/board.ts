@@ -37,12 +37,21 @@ export class Board implements Initializable, Updatable {
   }
 
   private onKeyDown(e: KeyboardEvent): void {
+    let requireReRender = false;
+
     if (e.key === 'a' || e.key == 'ArrowLeft') {
       this._activeShape.move(Direction.Left);
+      requireReRender = true;
     } else if (e.key === 'd' || e.key === 'ArrowRight') {
       this._activeShape.move(Direction.Right);
+      requireReRender = true;
     } else if (e.key === 's' || e.key === 'ArrowDown') {
       this._activeShape.move(Direction.Down);
+      requireReRender = true;
+    }
+
+    if (requireReRender) {
+      this.renderShape(this._activeShape);
     }
   }
 

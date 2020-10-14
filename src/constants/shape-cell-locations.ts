@@ -23,9 +23,9 @@ export const SHAPE_CELL_LOCATIONS = new Map<ShapeType, boolean[][]>([
     ShapeType.L,
     [
       [false, false, false, false],
-      [false, false, false, true],
+      [false, false, false, false],
       [false, true, true, true],
-      [false, false, false, false]
+      [false, true, false, false]
     ]
   ],
   [
