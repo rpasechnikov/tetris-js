@@ -65,7 +65,7 @@ $border-thickness: 1px;
       }
 
       &.orange {
-        background-color: rgb(218, 160, 52);
+        background-color: rgb(247, 167, 19);
       }
 
       &.pink {
@@ -77,11 +77,11 @@ $border-thickness: 1px;
       }
 
       &.yellow {
-        background-color: rgb(206, 206, 5);
+        background-color: rgb(255, 255, 15);
       }
 
       .cell-inner {
-        border: 4px solid $very-light-grey;
+        // border: 4px solid $very-light-grey;
         border-radius: 2px;
         padding: 8px;
         display: flex;

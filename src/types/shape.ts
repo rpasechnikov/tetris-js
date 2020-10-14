@@ -63,9 +63,9 @@ export class Shape implements Initializable {
 
   move(direction: Direction): void {
     if (direction === Direction.Left) {
-      // TODO
+      this._location.x--;
     } else if (direction === Direction.Right) {
-      // TODO
+      this._location.x++;
     } else {
       this._location.y--;
     }

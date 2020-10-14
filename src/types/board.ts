@@ -22,6 +22,8 @@ export class Board implements Initializable, Updatable {
 
     this.renderCells();
     this.update();
+
+    document.addEventListener('keydown', (e: KeyboardEvent) => this.onKeyDown(e));
   }
 
   update(): void {
@@ -34,14 +36,24 @@ export class Board implements Initializable, Updatable {
     }
   }
 
-  spawnActiveShape(): void {
+  private onKeyDown(e: KeyboardEvent): void {
+    if (e.key === 'a' || e.key == 'ArrowLeft') {
+      this._activeShape.move(Direction.Left);
+    } else if (e.key === 'd' || e.key === 'ArrowRight') {
+      this._activeShape.move(Direction.Right);
+    } else if (e.key === 's' || e.key === 'ArrowDown') {
+      this._activeShape.move(Direction.Down);
+    }
+  }
+
+  private spawnActiveShape(): void {
     const spawnLocation: Vector2 = { y: 20, x: 3 };
     this._activeShape = new Shape(spawnLocation);
     this._activeShape.init();
     this.renderShape(this._activeShape);
   }
 
-  spawnActivePixel(): void {
+  private spawnActivePixel(): void {
     const spawnLocation = this.getRandomSpawnLocation();
     const cellToActivate = this._cells[spawnLocation.y][spawnLocation.x];
     cellToActivate.activate(getRandomColour(), null);
