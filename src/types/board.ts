@@ -43,6 +43,8 @@ export class Board implements Initializable, Updatable {
       this.moveShapeInDirectionIfPossible(this._activeShape, Direction.Right);
     } else if (e.key === 's' || e.key === 'ArrowDown') {
       this.moveShapeInDirectionIfPossible(this._activeShape, Direction.Down);
+    } else if (e.key === 'w' || e.key === 'ArrowUp') {
+      this.rotateShapeIfPossible(this._activeShape);
     }
   }
 
@@ -58,6 +60,19 @@ export class Board implements Initializable, Updatable {
 
     // Move shape and re-render
     shape.move(direction);
+    this.renderShape(shape);
+  }
+
+  private rotateShapeIfPossible(shape: Shape): void {
+    if (!shape) {
+      return;
+    }
+
+    // Check if rotation is possible
+    // TODO
+
+    // Rotate
+    shape.rotate();
     this.renderShape(shape);
   }
 

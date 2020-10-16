@@ -1,8 +1,7 @@
 import { Initializable, Vector2 } from '../interfaces';
 import { Colour, Direction, ShapeRotation, ShapeType } from '../enums';
 import { Cell } from './cell';
-import { SHAPE_CELL_LOCATIONS } from '../constants';
-import { getDefaultShapeForShapeType, getRandomColour } from '../utils';
+import { getRandomColour, getShapeForShapeRotation } from '../utils';
 
 /** Represents a collection of cells in a specific shape.
  * All cells are in local coordinates, starting with 0,0 at top left and ending
@@ -38,15 +37,41 @@ export class Shape implements Initializable {
   }
 
   init(): void {
-    // this._shapeRotation = this.getRandomShapeRotation();
-
-    this._cellMap = [];
-    this._cells = [];
+    // All new shapes should be facing up.. I think?
+    this._shapeRotation = ShapeRotation.Up;
 
     this._shapeType = this.getRandomShapeType();
     this._colour = getRandomColour();
 
-    const cellLocations = getDefaultShapeForShapeType(this._shapeType);
+    this.initializeShapeCells();
+  }
+
+  move(direction: Direction): void {
+    if (direction === Direction.Left) {
+      this._location.x--;
+    } else if (direction === Direction.Right) {
+      this._location.x++;
+    } else {
+      this._location.y--;
+    }
+  }
+
+  rotate(): void {
+    // Turn the shape clockwise
+    if (this._shapeRotation > ShapeRotation.Up) {
+      this._shapeRotation--;
+    } else {
+      this._shapeRotation = ShapeRotation.Right;
+    }
+
+    this.initializeShapeCells();
+  }
+
+  private initializeShapeCells(): void {
+    const cellLocations = getShapeForShapeRotation(this._shapeType, this._shapeRotation);
+
+    this._cellMap = [];
+    this._cells = [];
 
     for (var y = 0; y < 4; y++) {
       this._cellMap[y] = [];
@@ -58,16 +83,6 @@ export class Shape implements Initializable {
           this.cells.push(cell);
         }
       }
-    }
-  }
-
-  move(direction: Direction): void {
-    if (direction === Direction.Left) {
-      this._location.x--;
-    } else if (direction === Direction.Right) {
-      this._location.x++;
-    } else {
-      this._location.y--;
     }
   }
 
