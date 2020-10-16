@@ -2,7 +2,7 @@ import { Initializable, Vector2 } from '../interfaces';
 import { Colour, Direction, ShapeRotation, ShapeType } from '../enums';
 import { Cell } from './cell';
 import { SHAPE_CELL_LOCATIONS } from '../constants';
-import { getRandomColour } from '../utils';
+import { getDefaultShapeForShapeType, getRandomColour } from '../utils';
 
 /** Represents a collection of cells in a specific shape.
  * All cells are in local coordinates, starting with 0,0 at top left and ending
@@ -46,7 +46,7 @@ export class Shape implements Initializable {
     this._shapeType = this.getRandomShapeType();
     this._colour = getRandomColour();
 
-    const cellLocations = SHAPE_CELL_LOCATIONS.get(this._shapeType);
+    const cellLocations = getDefaultShapeForShapeType(this._shapeType);
 
     for (var y = 0; y < 4; y++) {
       this._cellMap[y] = [];
