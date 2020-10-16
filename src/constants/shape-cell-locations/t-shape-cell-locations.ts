@@ -1,8 +1,8 @@
-import { ShapeRotation } from '../../enums';
+import { Rotation } from '../../enums';
 
-export const T_SHAPE_CELL_LOCATIONS = new Map<ShapeRotation, boolean[][]>([
+export const T_SHAPE_CELL_LOCATIONS = new Map<Rotation, boolean[][]>([
   [
-    ShapeRotation.Up,
+    Rotation.Up,
     [
       [false, false, false, false],
       [true, true, true, false],
@@ -11,7 +11,7 @@ export const T_SHAPE_CELL_LOCATIONS = new Map<ShapeRotation, boolean[][]>([
     ]
   ],
   [
-    ShapeRotation.Left,
+    Rotation.Left,
     [
       [false, false, false, false],
       [false, true, false, false],
@@ -20,7 +20,7 @@ export const T_SHAPE_CELL_LOCATIONS = new Map<ShapeRotation, boolean[][]>([
     ]
   ],
   [
-    ShapeRotation.Down,
+    Rotation.Down,
     [
       [false, false, false, false],
       [false, true, false, false],
@@ -29,7 +29,7 @@ export const T_SHAPE_CELL_LOCATIONS = new Map<ShapeRotation, boolean[][]>([
     ]
   ],
   [
-    ShapeRotation.Right,
+    Rotation.Right,
     [
       [false, false, false, false],
       [false, true, false, false],

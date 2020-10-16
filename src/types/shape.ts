@@ -1,7 +1,7 @@
-import { Initializable, Vector2 } from '../interfaces';
-import { Colour, Direction, ShapeRotation, ShapeType } from '../enums';
+import { Cloneable, Initializable, Vector2 } from '../interfaces';
+import { Colour, Direction, Rotation, ShapeType } from '../enums';
 import { Cell } from './cell';
-import { getRandomColour, getShapeForShapeRotation } from '../utils';
+import { getRandomColour, getShapeCells, getShapeForShapeRotation, rotateClockwise } from '../utils';
 
 /** Represents a collection of cells in a specific shape.
  * All cells are in local coordinates, starting with 0,0 at top left and ending
@@ -11,7 +11,7 @@ export class Shape implements Initializable {
   private _cellMap: Cell[][];
   private _cells: Cell[];
   private _shapeType: ShapeType;
-  private _shapeRotation: ShapeRotation;
+  private _rotation: Rotation;
   private _colour: Colour;
   private _location: Vector2;
 
@@ -31,6 +31,14 @@ export class Shape implements Initializable {
     return this._colour;
   }
 
+  get type(): ShapeType {
+    return this._shapeType;
+  }
+
+  get rotation(): Rotation {
+    return this._rotation;
+  }
+
   /** Location of the top left cell of this shape */
   constructor(location: Vector2) {
     this._location = location;
@@ -38,7 +46,7 @@ export class Shape implements Initializable {
 
   init(): void {
     // All new shapes should be facing up.. I think?
-    this._shapeRotation = ShapeRotation.Up;
+    this._rotation = Rotation.Up;
 
     this._shapeType = this.getRandomShapeType();
     this._colour = getRandomColour();
@@ -57,33 +65,15 @@ export class Shape implements Initializable {
   }
 
   rotate(): void {
-    // Turn the shape clockwise
-    if (this._shapeRotation > ShapeRotation.Up) {
-      this._shapeRotation--;
-    } else {
-      this._shapeRotation = ShapeRotation.Right;
-    }
-
+    this._rotation = rotateClockwise(this._rotation);
     this.initializeShapeCells();
   }
 
   private initializeShapeCells(): void {
-    const cellLocations = getShapeForShapeRotation(this._shapeType, this._shapeRotation);
+    const shapeCellsResult = getShapeCells(this.type, this.rotation, this.colour);
 
-    this._cellMap = [];
-    this._cells = [];
-
-    for (var y = 0; y < 4; y++) {
-      this._cellMap[y] = [];
-
-      for (var x = 0; x < 4; x++) {
-        if (!!cellLocations[y][x]) {
-          const cell = new Cell(null, { x, y }, this._colour, this);
-          this._cellMap[y][x] = cell;
-          this.cells.push(cell);
-        }
-      }
-    }
+    this._cellMap = shapeCellsResult.cellMap;
+    this._cells = shapeCellsResult.cells;
   }
 
   private getRandomShapeType(): ShapeType {

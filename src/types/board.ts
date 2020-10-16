@@ -1,4 +1,4 @@
-import { canShapeMoveInDirection, getRandomColour, shapeToBoardCellLocation } from '../utils';
+import { canShapeMoveInDirection, canShapeRotate, getRandomColour, shapeToBoardCellLocation } from '../utils';
 import { CellState, Colour, Direction } from '../enums';
 import { Initializable, Updatable, Vector2 } from '../interfaces';
 import { Cell } from './cell';
@@ -69,7 +69,13 @@ export class Board implements Initializable, Updatable {
     }
 
     // Check if rotation is possible
-    // TODO
+    // 1. Clone shape
+    // 2. Rotate clone
+    // 2a. Hide currently active shape? or simply de-rotate original?
+    // 3. Check clone for collisions
+    if (!canShapeRotate(this._cells, shape)) {
+      return;
+    }
 
     // Rotate
     shape.rotate();

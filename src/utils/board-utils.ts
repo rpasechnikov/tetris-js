@@ -2,7 +2,9 @@ import { Vector2 } from '../interfaces';
 import { CellState, Direction } from '../enums';
 import { Cell, Shape } from '../types';
 import { BOUNDS } from '../constants';
+import { getShapeCells, rotateClockwise } from '.';
 
+/** Returns true if the shape will not intersect with any other non-empty cells post movement in the direction specified, false otherwise */
 export function canShapeMoveInDirection(boardCells: Cell[][], shape: Shape, direction: Direction): boolean {
   if (direction === Direction.Down) {
     return canShapeMoveDown(boardCells, shape);
@@ -13,6 +15,35 @@ export function canShapeMoveInDirection(boardCells: Cell[][], shape: Shape, dire
   } else {
     console.warn('canShapeMove() does not support Direction.Up!');
   }
+}
+
+/** Returns true if the shape will not intersect with any other non-empty cells post rotation, false otherwise */
+export function canShapeRotate(boardCells: Cell[][], shape: Shape): boolean {
+  const rotatedShapeCells = getShapeCells(shape.type, rotateClockwise(shape.rotation), shape.colour);
+
+  for (const shapeCell of rotatedShapeCells.cells) {
+    const cellWorldLocation = shapeToBoardCellLocation(shapeCell.location, shape.location);
+
+    // Cell is out of board bounds
+    if (
+      cellWorldLocation.x < 0 ||
+      cellWorldLocation.x > BOUNDS.BoardWidth - 1 ||
+      cellWorldLocation.y < 0 ||
+      cellWorldLocation.y > BOUNDS.BoardHeight - 1
+    ) {
+      return false;
+    }
+
+    // This is NOT an active shape cell (the shape that we are trying to rotate) and there is another non-empty cell at this location
+    if (
+      !boardCells[cellWorldLocation.y][cellWorldLocation.x].shape &&
+      boardCells[cellWorldLocation.y][cellWorldLocation.x].state !== CellState.Empty
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 export function canShapeMoveDown(boardCells: Cell[][], shape: Shape): boolean {
