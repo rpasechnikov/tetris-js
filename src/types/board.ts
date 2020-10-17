@@ -1,4 +1,4 @@
-import { canShapeMoveInDirection, canShapeRotate, shapeToBoardCellLocation } from '../utils';
+import { areAllCellsNonEmpty, canShapeMoveInDirection, canShapeRotate, shapeToBoardCellLocation } from '../utils';
 import { CellState, Direction } from '../enums';
 import { Initializable, Updatable, Vector2 } from '../interfaces';
 import { Cell } from './cell';
@@ -52,9 +52,9 @@ export class Board implements Initializable, Updatable {
   /** Checks if any of the lines are completely filled with cells and if so, removes them and updates the board */
   private resolveFilledLines(): void {
     for (let y = 0; y < BOUNDS.BoardHeight; y++) {
-      const line = this._cells[y];
+      const lineCells = this._cells[y];
 
-      if (this.isLineFull(line)) {
+      if (areAllCellsNonEmpty(lineCells)) {
         for (let y2 = y; y2 < BOUNDS.BoardHeight - 1; y2++) {
           // Update each cell in the moved-down row
           for (let x = 0; x < BOUNDS.BoardWidth; x++) {
@@ -64,32 +64,13 @@ export class Board implements Initializable, Updatable {
             this._cells[y2][x] = this._cells[y2 + 1][x].clone();
 
             const cell = this._cells[y2][x];
-            cell.updateLocation({ x: cell.location.x, y: cell.location.y - 1 });
 
+            cell.updateLocation({ x: cell.location.x, y: cell.location.y - 1 });
             cell.updateElement(oldCellElement, cell.colour);
           }
         }
-
-        // Insert a new line at the top
-        for (let x = 0; x < BOUNDS.BoardWidth; x++) {
-          // this._cells[BOUNDS.BoardHeight - 1][x] = new BoardCell()
-        }
-
-        if (!!this._activeShape && this._activeShape.location.y > y) {
-          this._activeShape.updateLocation({ x: this._activeShape.location.x, y: this._activeShape.location.y - 1 });
-        }
       }
     }
-  }
-
-  private isLineFull(cells: Cell[]): boolean {
-    for (const cell of cells) {
-      if (cell.state === CellState.Empty) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   private moveShapeInDirectionIfPossible(shape: Shape, direction: Direction): void {

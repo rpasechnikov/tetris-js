@@ -118,3 +118,13 @@ export function shapeToBoardCellLocation(localCellLocation: Vector2, shapeLocati
     x: shapeLocation.x + localCellLocation.x
   };
 }
+
+export function areAllCellsNonEmpty(cells: Cell[]): boolean {
+  for (const cell of cells) {
+    if (cell.state === CellState.Empty) {
+      return false;
+    }
+  }
+
+  return true;
+}
