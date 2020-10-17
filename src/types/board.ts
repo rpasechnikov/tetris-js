@@ -29,11 +29,10 @@ export class Board implements Initializable, Updatable {
   }
 
   update(): void {
-    this.resolveFilledLines();
-
     if (!!this._activeShape) {
       this.updateActiveShape();
     } else {
+      this.resolveFilledLines();
       this.spawnActiveShape();
     }
   }
@@ -52,44 +51,35 @@ export class Board implements Initializable, Updatable {
 
   /** Checks if any of the lines are completely filled with cells and if so, removes them and updates the board */
   private resolveFilledLines(): void {
-    // for (let y = 0; y < BOUNDS.BoardHeight; y++) {
-    const y = 0;
-    const line = this._cells[0];
+    for (let y = 0; y < BOUNDS.BoardHeight; y++) {
+      const line = this._cells[y];
 
-    if (this.isLineFull(line)) {
-      for (let y2 = y; y2 < BOUNDS.BoardHeight - 1; y2++) {
-        // Replace this row with the row above
-        // const oldCells = this._cells[y2];
+      if (this.isLineFull(line)) {
+        for (let y2 = y; y2 < BOUNDS.BoardHeight - 1; y2++) {
+          // Update each cell in the moved-down row
+          for (let x = 0; x < BOUNDS.BoardWidth; x++) {
+            const oldCellElement = this._cells[y2][x].element;
 
-        // Need to clone the objects here
-        // this._cells[y2] = this._cells[y2 + 1];
+            // Clone the above cell into the current cell
+            this._cells[y2][x] = this._cells[y2 + 1][x].clone();
 
-        // Update each cell in the moved-down row
+            const cell = this._cells[y2][x];
+            cell.updateLocation({ x: cell.location.x, y: cell.location.y - 1 });
+
+            cell.updateElement(oldCellElement, cell.colour);
+          }
+        }
+
+        // Insert a new line at the top
         for (let x = 0; x < BOUNDS.BoardWidth; x++) {
-          const cellAbove = this._cells[y2 + 1][x];
-          const oldCellElement = this._cells[y2][x].element;
+          // this._cells[BOUNDS.BoardHeight - 1][x] = new BoardCell()
+        }
 
-          this._cells[y2][x] = cellAbove.clone();
-
-          const cell = this._cells[y2][x];
-          cell.updateLocation({ x: cell.location.x, y: cell.location.y - 1 });
-
-          const cellElement = cell.element;
-
-          cell.updateElement(oldCellElement, cell.colour);
+        if (!!this._activeShape && this._activeShape.location.y > y) {
+          this._activeShape.updateLocation({ x: this._activeShape.location.x, y: this._activeShape.location.y - 1 });
         }
       }
-
-      // Insert a new line at the top
-      for (let x = 0; x < BOUNDS.BoardWidth; x++) {
-        // this._cells[BOUNDS.BoardHeight - 1][x] = new BoardCell()
-      }
-
-      if (!!this._activeShape && this._activeShape.location.y > y) {
-        this._activeShape.updateLocation({ x: this._activeShape.location.x, y: this._activeShape.location.y - 1 });
-      }
     }
-    // }
   }
 
   private isLineFull(cells: Cell[]): boolean {
