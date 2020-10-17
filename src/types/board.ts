@@ -59,7 +59,7 @@ export class Board implements Initializable, Updatable {
     if (this.isLineFull(line)) {
       for (let y2 = y; y2 < BOUNDS.BoardHeight - 1; y2++) {
         // Replace this row with the row above
-        const oldCells = this._cells[y2];
+        // const oldCells = this._cells[y2];
 
         // Need to clone the objects here
         // this._cells[y2] = this._cells[y2 + 1];
@@ -67,13 +67,22 @@ export class Board implements Initializable, Updatable {
         // Update each cell in the moved-down row
         for (let x = 0; x < BOUNDS.BoardWidth; x++) {
           const cellAbove = this._cells[y2 + 1][x];
+          const oldCellElement = this._cells[y2][x].element;
 
           this._cells[y2][x] = cellAbove.clone();
 
           const cell = this._cells[y2][x];
           cell.updateLocation({ x: cell.location.x, y: cell.location.y - 1 });
-          cell.updateElement(oldCells[x].element, cell.colour);
+
+          const cellElement = cell.element;
+
+          cell.updateElement(oldCellElement, cell.colour);
         }
+      }
+
+      // Insert a new line at the top
+      for (let x = 0; x < BOUNDS.BoardWidth; x++) {
+        // this._cells[BOUNDS.BoardHeight - 1][x] = new BoardCell()
       }
 
       if (!!this._activeShape && this._activeShape.location.y > y) {
