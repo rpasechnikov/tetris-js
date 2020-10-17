@@ -1,13 +1,13 @@
 import { Cloneable, Initializable, Vector2 } from '../interfaces';
 import { Colour, Direction, Rotation, ShapeType } from '../enums';
 import { Cell } from './cell';
-import { getRandomColour, getShapeCells, getShapeForShapeRotation, rotateClockwise } from '../utils';
+import { getRandomColour, getRandomShapeType, getShapeCells, rotateClockwise } from '../utils';
 
 /** Represents a collection of cells in a specific shape.
  * All cells are in local coordinates, starting with 0,0 at top left and ending
  * with 3,3, at bottom right
  */
-export class Shape implements Initializable {
+export class Shape implements Cloneable<Shape> {
   private _cellMap: Cell[][];
   private _cells: Cell[];
   private _shapeType: ShapeType;
@@ -40,18 +40,36 @@ export class Shape implements Initializable {
   }
 
   /** Location of the top left cell of this shape */
-  constructor(location: Vector2) {
+  constructor(location: Vector2, type: ShapeType = null, rotation: Rotation = null, colour: Colour = null) {
     this._location = location;
-  }
 
-  init(): void {
-    // All new shapes should be facing up.. I think?
-    this._rotation = Rotation.Up;
+    if (!!type) {
+      this._shapeType = type;
+    } else {
+      this._shapeType = getRandomShapeType();
+    }
 
-    this._shapeType = this.getRandomShapeType();
-    this._colour = getRandomColour();
+    if (!!rotation) {
+      this._rotation = rotation;
+    } else {
+      this._rotation = Rotation.Up;
+    }
+
+    if (!!colour) {
+      this._colour = colour;
+    } else {
+      this._colour = getRandomColour();
+    }
 
     this.initializeShapeCells();
+  }
+
+  clone(): Shape {
+    return new Shape(this.location, this.type, this.rotation, this.colour);
+  }
+
+  updateLocation(location: Vector2): void {
+    this._location = location;
   }
 
   move(direction: Direction): void {
@@ -74,9 +92,5 @@ export class Shape implements Initializable {
 
     this._cellMap = shapeCellsResult.cellMap;
     this._cells = shapeCellsResult.cells;
-  }
-
-  private getRandomShapeType(): ShapeType {
-    return Math.floor(Math.random() * ShapeType.Z);
   }
 }

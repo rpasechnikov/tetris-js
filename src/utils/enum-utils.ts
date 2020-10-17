@@ -1,7 +1,7 @@
 import { Colour, Rotation, ShapeType } from '../enums';
 
 export function getRandomColour(): Colour {
-  return Math.floor(Math.random() * Colour.Black) as Colour;
+  return Math.floor(Math.random() * Colour.Red) as Colour;
 }
 
 export function getRandomShapeType(): ShapeType {

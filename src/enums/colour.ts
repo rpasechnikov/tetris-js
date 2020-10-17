@@ -1,10 +1,9 @@
 export enum Colour {
-  LightBlue,
-  DarkBlue,
-  Orange,
-  Yellow,
-  Green,
-  Pink,
-  Red,
-  Black
+  LightBlue = 0,
+  DarkBlue = 1,
+  Orange = 2,
+  Yellow = 3,
+  Green = 4,
+  Pink = 5,
+  Red = 6
 }

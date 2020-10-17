@@ -1,4 +1,4 @@
-import { Cell, Shape } from '../types';
+import { Cell } from '../types';
 import {
   DEFAULT_CELL_LOCATIONS,
   I_SHAPE_CELL_LOCATIONS,
@@ -48,7 +48,7 @@ export function getShapeCells(shapeType: ShapeType, shapeRotation: Rotation, sha
 
     for (var x = 0; x < 4; x++) {
       if (!!cellLocations[y][x]) {
-        const cell = new Cell(null, { x, y }, shapeColour, this);
+        const cell = new Cell({ x, y }, shapeColour, this);
         cellMap[y][x] = cell;
         cells.push(cell);
       }

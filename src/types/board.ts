@@ -1,8 +1,10 @@
-import { canShapeMoveInDirection, canShapeRotate, getRandomColour, shapeToBoardCellLocation } from '../utils';
-import { CellState, Colour, Direction } from '../enums';
+import { canShapeMoveInDirection, canShapeRotate, shapeToBoardCellLocation } from '../utils';
+import { CellState, Direction } from '../enums';
 import { Initializable, Updatable, Vector2 } from '../interfaces';
 import { Cell } from './cell';
 import { Shape } from './shape';
+import { BOUNDS, CSS_CLASSES } from '../constants';
+import { BoardCell } from './board-cell';
 
 export class Board implements Initializable, Updatable {
   private readonly _boardHeight = 20;
@@ -12,7 +14,7 @@ export class Board implements Initializable, Updatable {
   /** Cells stored in Y-X format starting with 19, 0 at top left and
    * ending with 0,9 at bottom right
    */
-  private _cells: Cell[][];
+  private _cells: BoardCell[][];
 
   private _activeCells: Cell[];
   private _activeShape: Shape;
@@ -27,11 +29,11 @@ export class Board implements Initializable, Updatable {
   }
 
   update(): void {
+    this.resolveFilledLines();
+
     if (!!this._activeShape) {
-      // this.updateActiveCells();
       this.updateActiveShape();
     } else {
-      // this.spawnActivePixel();
       this.spawnActiveShape();
     }
   }
@@ -48,36 +50,63 @@ export class Board implements Initializable, Updatable {
     }
   }
 
+  /** Checks if any of the lines are completely filled with cells and if so, removes them and updates the board */
+  private resolveFilledLines(): void {
+    // for (let y = 0; y < BOUNDS.BoardHeight; y++) {
+    const y = 0;
+    const line = this._cells[0];
+
+    if (this.isLineFull(line)) {
+      for (let y2 = y; y2 < BOUNDS.BoardHeight - 1; y2++) {
+        // Replace this row with the row above
+        const oldCells = this._cells[y2];
+
+        // Need to clone the objects here
+        // this._cells[y2] = this._cells[y2 + 1];
+
+        // Update each cell in the moved-down row
+        for (let x = 0; x < BOUNDS.BoardWidth; x++) {
+          const cellAbove = this._cells[y2 + 1][x];
+
+          this._cells[y2][x] = cellAbove.clone();
+
+          const cell = this._cells[y2][x];
+          cell.updateLocation({ x: cell.location.x, y: cell.location.y - 1 });
+          cell.updateElement(oldCells[x].element, cell.colour);
+        }
+      }
+
+      if (!!this._activeShape && this._activeShape.location.y > y) {
+        this._activeShape.updateLocation({ x: this._activeShape.location.x, y: this._activeShape.location.y - 1 });
+      }
+    }
+    // }
+  }
+
+  private isLineFull(cells: Cell[]): boolean {
+    for (const cell of cells) {
+      if (cell.state === CellState.Empty) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   private moveShapeInDirectionIfPossible(shape: Shape, direction: Direction): void {
-    if (!shape) {
+    if (!shape || !canShapeMoveInDirection(this._cells, shape, direction)) {
       return;
     }
 
-    // Check if movement is possible
-    if (!canShapeMoveInDirection(this._cells, shape, direction)) {
-      return;
-    }
-
-    // Move shape and re-render
     shape.move(direction);
     this.renderShape(shape);
   }
 
   private rotateShapeIfPossible(shape: Shape): void {
-    if (!shape) {
+    if (!shape || !canShapeRotate(this._cells, shape)) {
       return;
     }
 
-    // Check if rotation is possible
-    // 1. Clone shape
-    // 2. Rotate clone
-    // 2a. Hide currently active shape? or simply de-rotate original?
-    // 3. Check clone for collisions
-    if (!canShapeRotate(this._cells, shape)) {
-      return;
-    }
-
-    // Rotate
     shape.rotate();
     this.renderShape(shape);
   }
@@ -85,16 +114,17 @@ export class Board implements Initializable, Updatable {
   private spawnActiveShape(): void {
     const spawnLocation: Vector2 = { y: 20, x: 3 };
     this._activeShape = new Shape(spawnLocation);
-    this._activeShape.init();
     this.renderShape(this._activeShape);
+
+    console.log(`Spawned ${this._activeShape.type} with colour ${this._activeShape.colour}`);
   }
 
+  /** Update shape location and if updated, render it */
   private updateActiveShape(): void {
-    // Update shape location and if updated, render it
     if (this.updateShapeLocation(this._activeShape)) {
       this.renderShape(this._activeShape);
     } else {
-      // Otherwise the shape can not be moved down anymore, so destroy it
+      // Otherwise the shape can not be moved down anymore, so destroy it and de-activate the cells
       for (const activeCell of this._activeCells) {
         activeCell.deActivate();
       }
@@ -102,10 +132,6 @@ export class Board implements Initializable, Updatable {
       this._activeShape = null;
       this._activeCells = [];
     }
-
-    // Check if this shape can be moved down
-    // If so - move them down
-    // Otherwise - de-activate relevant shapes and destroy the shape
   }
 
   private updateShapeLocation(shape: Shape): boolean {
@@ -146,12 +172,11 @@ export class Board implements Initializable, Updatable {
       for (var x = 0; x < this._boardWidth; x++) {
         var cellElement = document.createElement('div');
         cellElement.className = 'cell';
-        cellElement.innerHTML = `<div class="cell-inner"></div>`;
+        cellElement.innerHTML = `<div class="${CSS_CLASSES.CellInner}"></div>`;
 
         this._gameBoard.appendChild(cellElement);
 
-        var cell = new Cell(cellElement, { x, y });
-        cell.init();
+        var cell = new BoardCell(cellElement, { x, y });
 
         this._cells[y][x] = cell;
       }

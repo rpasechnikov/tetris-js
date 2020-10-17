@@ -1,17 +1,15 @@
-import { Initializable, Vector2 } from '../interfaces';
+import { Cloneable, Initializable, Vector2 } from '../interfaces';
 import { CellState } from '../enums';
 import { Colour } from '../enums/colour';
-import { COLOURS } from '../constants';
-import { getRandomColour } from '../utils';
+import { COLOURS, CSS_CLASSES } from '../constants';
 import { Shape } from './shape';
 
-/** Represents a 'cell' that could be a shape or an empty cell */
-export class Cell implements Initializable {
-  private _element: Element;
-  private _colour: Colour;
-  private _location: Vector2;
-  private _state: CellState;
-  private _shape: Shape;
+/** Represents a 'cell' that could be part of shape or otherwise */
+export class Cell implements Cloneable<Cell> {
+  protected _colour: Colour;
+  protected _location: Vector2;
+  protected _state: CellState;
+  protected _shape: Shape;
 
   get location(): Vector2 {
     return this._location;
@@ -29,18 +27,19 @@ export class Cell implements Initializable {
     return this._shape;
   }
 
-  constructor(element: Element, location: Vector2, colour: Colour = null, shape: Shape = null) {
-    this._element = element;
+  constructor(location: Vector2, colour: Colour = null, shape: Shape = null, state: CellState = CellState.Empty) {
     this._colour = colour;
     this._location = location;
     this._shape = shape;
-    this._state = CellState.Empty;
+    this._state = state;
   }
 
-  init(): void {
-    if (!!this._element) {
-      this._element.addEventListener('click', (e: MouseEvent) => this.onClick(e));
-    }
+  clone(): Cell {
+    return new Cell(this.location, this.colour, this.shape, this.state);
+  }
+
+  updateLocation(location: Vector2): void {
+    this._location = location;
   }
 
   activate(colour: Colour, shape: Shape): void {
@@ -59,23 +58,15 @@ export class Cell implements Initializable {
     this.unsetColour(this._colour);
   }
 
-  private onClick(_: MouseEvent): void {
+  protected onClick(_: MouseEvent): void {
     console.log(`Clicked cell at x: ${this._location.x}, y: ${this._location.y}`);
   }
 
-  private setColour(colour: Colour): void {
+  protected setColour(colour: Colour): void {
     this._colour = colour;
-
-    if (!!this._element) {
-      this._element.classList.add(COLOURS.get(colour));
-    }
   }
 
-  private unsetColour(colour: Colour): void {
-    if (!!this._element) {
-      this._element.classList.remove(COLOURS.get(colour));
-    }
-
+  protected unsetColour(_: Colour): void {
     this._colour = null;
   }
 }
