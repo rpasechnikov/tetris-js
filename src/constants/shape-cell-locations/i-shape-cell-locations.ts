@@ -1,40 +1,40 @@
 import { Rotation } from '../../enums';
 
-export const I_SHAPE_CELL_LOCATIONS = new Map<Rotation, boolean[][]>([
+export const I_SHAPE_CELL_LOCATIONS = new Map<Rotation, number[][]>([
   [
     Rotation.Up,
     [
-      [false, false, false, false],
-      [false, false, false, false],
-      [true, true, true, true],
-      [false, false, false, false]
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [1, 1, 1, 1],
+      [0, 0, 0, 0]
     ]
   ],
   [
     Rotation.Left,
     [
-      [false, true, false, false],
-      [false, true, false, false],
-      [false, true, false, false],
-      [false, true, false, false]
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0]
     ]
   ],
   [
     Rotation.Down,
     [
-      [false, false, false, false],
-      [false, false, false, false],
-      [true, true, true, true],
-      [false, false, false, false]
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [1, 1, 1, 1],
+      [0, 0, 0, 0]
     ]
   ],
   [
     Rotation.Right,
     [
-      [false, true, false, false],
-      [false, true, false, false],
-      [false, true, false, false],
-      [false, true, false, false]
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0],
+      [0, 1, 0, 0]
     ]
   ]
 ]);
