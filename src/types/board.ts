@@ -9,6 +9,7 @@ import { BoardCell } from './board-cell';
 export class Board implements Initializable, Updatable {
   private readonly _boardHeight = 20;
   private readonly _boardWidth = 10;
+  private readonly _cellElementId = 'cell';
   private _gameBoard: Element;
 
   /** Cells stored in Y-X format starting with 19, 0 at top left and
@@ -19,22 +20,59 @@ export class Board implements Initializable, Updatable {
   private _activeCells: Cell[];
   private _activeShape: Shape;
 
+  private _isGameRunning = false;
+
   init(): void {
     this._gameBoard = document.getElementsByClassName('game-board')[0];
-
-    this.renderCells();
-    this.update();
-
     document.addEventListener('keydown', (e: KeyboardEvent) => this.onKeyDown(e));
+
+    this.setupBoard();
+  }
+
+  playPause(play: boolean): void {
+    this._isGameRunning = play;
+  }
+
+  reset(): void {
+    const wasGameRunning = this._isGameRunning;
+
+    if (wasGameRunning) {
+      this.playPause(false);
+    }
+
+    this.setupBoard();
+
+    if (wasGameRunning) {
+      this.playPause(true);
+    }
   }
 
   update(): void {
+    if (!this._isGameRunning) {
+      return;
+    }
+
     if (!!this._activeShape) {
       this.updateActiveShape();
     } else {
       this.resolveFilledLines();
       this.spawnActiveShape();
     }
+  }
+
+  private setupBoard(): void {
+    this._cells = [];
+    this._activeCells = [];
+    this._activeShape = null;
+
+    const cellElements = document.getElementsByClassName(CSS_CLASSES.CELL);
+
+    for (const cellElement of Array.from(cellElements)) {
+      this._gameBoard.removeChild(cellElement);
+    }
+
+    this.renderCells();
+    this.update();
   }
 
   private onKeyDown(e: KeyboardEvent): void {
@@ -156,15 +194,13 @@ export class Board implements Initializable, Updatable {
   }
 
   private renderCells(): void {
-    this._cells = [];
-
     for (var y = this._boardHeight - 1; y > -1; y--) {
       this._cells[y] = [];
 
       for (var x = 0; x < this._boardWidth; x++) {
         var cellElement = document.createElement('div');
         cellElement.className = 'cell';
-        cellElement.innerHTML = `<div class="${CSS_CLASSES.CellInner}"></div>`;
+        cellElement.innerHTML = `<div class="${CSS_CLASSES.CELL_INNER}"></div>`;
 
         this._gameBoard.appendChild(cellElement);
 

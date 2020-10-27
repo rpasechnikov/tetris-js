@@ -9,12 +9,13 @@ function main(): void {
   const gameControls = new Controls();
   const gameBoard = new Board();
 
-  const updatableControls: Updatable[] = [gameControls, gameBoard];
-
   gameControls.init();
   gameBoard.init();
 
-  setInterval(doTimestep, timestepMs, updatableControls);
+  gameControls.playPause$.subscribe(play => gameBoard.playPause(play));
+  gameControls.reset$.subscribe(_ => gameBoard.reset());
+
+  setInterval(doTimestep, timestepMs, [gameControls, gameBoard]);
 }
 
 function doTimestep(updatableControls: Updatable[]): void {

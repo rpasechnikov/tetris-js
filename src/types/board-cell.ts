@@ -26,7 +26,7 @@ export class BoardCell extends Cell {
     this._element = element;
 
     // Clear any previous classes and set default
-    this._element.className = CSS_CLASSES.Cell;
+    this._element.className = CSS_CLASSES.CELL;
     this.setColour(colour);
   }
 
