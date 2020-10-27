@@ -51,10 +51,20 @@ export class Board implements Initializable, Updatable {
 
   /** Checks if any of the lines are completely filled with cells and if so, removes them and updates the board */
   private resolveFilledLines(): void {
+    // True if the previous pass has resolved at least a single line. This means that
+    // cells were shifted down, so let's start again from y=0
+    let lineResolved = false;
+
     for (let y = 0; y < BOUNDS.BoardHeight; y++) {
+      if (lineResolved) {
+        y--;
+      }
+
       const lineCells = this._cells[y];
 
       if (areAllCellsNonEmpty(lineCells)) {
+        lineResolved = true;
+
         for (let y2 = y; y2 < BOUNDS.BoardHeight - 1; y2++) {
           // Update each cell in the moved-down row
           for (let x = 0; x < BOUNDS.BoardWidth; x++) {
@@ -69,6 +79,8 @@ export class Board implements Initializable, Updatable {
             cell.updateElement(oldCellElement, cell.colour);
           }
         }
+      } else {
+        lineResolved = false;
       }
     }
   }
