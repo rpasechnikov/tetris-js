@@ -5,6 +5,7 @@ import { Cell } from './cell';
 import { Shape } from './shape';
 import { BOUNDS, CSS_CLASSES } from '../constants';
 import { BoardCell } from './board-cell';
+import { Observable, Subject } from 'rxjs';
 
 export class Board implements Initializable, Updatable {
   private readonly _boardHeight = 20;
@@ -21,6 +22,12 @@ export class Board implements Initializable, Updatable {
   private _activeShape: Shape;
 
   private _isGameRunning = false;
+
+  private _rowResolved$ = new Subject<void>();
+
+  get rowResolved$(): Observable<void> {
+    return this._rowResolved$;
+  }
 
   init(): void {
     this._gameBoard = document.getElementsByClassName('game-board')[0];
@@ -93,7 +100,7 @@ export class Board implements Initializable, Updatable {
     // cells were shifted down, so let's start again from y=0
     let lineResolved = false;
 
-    for (let y = 0; y < BOUNDS.BoardHeight; y++) {
+    for (let y = 0; y < BOUNDS.BOARD_HEIGHT; y++) {
       if (lineResolved) {
         y--;
       }
@@ -103,9 +110,9 @@ export class Board implements Initializable, Updatable {
       if (areAllCellsNonEmpty(lineCells)) {
         lineResolved = true;
 
-        for (let y2 = y; y2 < BOUNDS.BoardHeight - 1; y2++) {
+        for (let y2 = y; y2 < BOUNDS.BOARD_HEIGHT - 1; y2++) {
           // Update each cell in the moved-down row
-          for (let x = 0; x < BOUNDS.BoardWidth; x++) {
+          for (let x = 0; x < BOUNDS.BOARD_WIDTH; x++) {
             const oldCellElement = this._cells[y2][x].element;
 
             // Clone the above cell into the current cell
@@ -117,6 +124,8 @@ export class Board implements Initializable, Updatable {
             cell.updateElement(oldCellElement, cell.colour);
           }
         }
+
+        this._rowResolved$.next();
       } else {
         lineResolved = false;
       }

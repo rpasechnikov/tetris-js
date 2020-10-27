@@ -1,4 +1,5 @@
 export const BOUNDS = {
-  BoardWidth: 10,
-  BoardHeight: 20
+  BOARD_WIDTH: 10,
+  BOARD_HEIGHT: 20,
+  TIMESTEP_MS: 400
 };

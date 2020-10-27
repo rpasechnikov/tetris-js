@@ -27,9 +27,9 @@ export function canShapeRotate(boardCells: Cell[][], shape: Shape): boolean {
     // Cell is out of board bounds
     if (
       cellWorldLocation.x < 0 ||
-      cellWorldLocation.x > BOUNDS.BoardWidth - 1 ||
+      cellWorldLocation.x > BOUNDS.BOARD_WIDTH - 1 ||
       cellWorldLocation.y < 0 ||
-      cellWorldLocation.y > BOUNDS.BoardHeight - 1
+      cellWorldLocation.y > BOUNDS.BOARD_HEIGHT - 1
     ) {
       return false;
     }
@@ -94,7 +94,7 @@ export function canShapeMoveRight(boardCells: Cell[][], shape: Shape): boolean {
     const cellWorldLocation = shapeToBoardCellLocation(shapeCell.location, shape.location);
 
     // Already at the bottom of the board
-    if (cellWorldLocation.x > BOUNDS.BoardWidth - 2) {
+    if (cellWorldLocation.x > BOUNDS.BOARD_WIDTH - 2) {
       return false;
     }
 
