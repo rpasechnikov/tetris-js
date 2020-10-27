@@ -17,6 +17,7 @@ function main(): void {
   gameControls.reset$.subscribe(_ => gameBoard.reset());
 
   gameBoard.rowResolved$.subscribe(_ => gameControls.incrementScore());
+  gameBoard.gameOver$.subscribe(_ => gameControls.displayGameOverMessage());
 
   setInterval(doTimestep, timestepMs, [gameControls, gameBoard]);
 }

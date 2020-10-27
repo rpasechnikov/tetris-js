@@ -13,6 +13,7 @@ export class Controls implements Initializable, Updatable {
   private _scoreDiv: Element;
   private _playPauseBtn: Element;
   private _resetBtn: Element;
+  private _gameOverMessage: Element;
 
   private _startingMs: number;
 
@@ -44,20 +45,19 @@ export class Controls implements Initializable, Updatable {
     this._score += 1000;
   }
 
+  displayGameOverMessage(): void {
+    this.togglePlayPause();
+    this._gameOverMessage.classList.add('visible');
+  }
+
   private setupUiControls(): void {
     this._timerDiv = document.getElementsByClassName('timer')[0];
     this._scoreDiv = document.getElementsByClassName('score')[0];
     this._playPauseBtn = document.getElementById('play-pause-btn');
     this._resetBtn = document.getElementById('reset-btn');
+    this._gameOverMessage = document.getElementById('game-over-message');
 
-    this.playPause$ = fromEvent(this._playPauseBtn, 'click').pipe(
-      map(_ => {
-        this._isGameRunning = !this._isGameRunning;
-        this.updatePlayPauseButtonText();
-
-        return this._isGameRunning;
-      })
-    );
+    this.playPause$ = fromEvent(this._playPauseBtn, 'click').pipe(map(_ => this.togglePlayPause()));
 
     this.reset$ = fromEvent(this._resetBtn, 'click').pipe(
       map(_ => {
@@ -71,9 +71,18 @@ export class Controls implements Initializable, Updatable {
     this._score = 0;
 
     this.updatePlayPauseButtonText();
+
+    this._gameOverMessage.classList.remove('visible');
   }
 
   private updatePlayPauseButtonText(): void {
     this._playPauseBtn.innerHTML = this._isGameRunning ? this.PAUSE : this.PLAY;
+  }
+
+  private togglePlayPause(): boolean {
+    this._isGameRunning = !this._isGameRunning;
+    this.updatePlayPauseButtonText();
+
+    return this._isGameRunning;
   }
 }

@@ -24,9 +24,14 @@ export class Board implements Initializable, Updatable {
   private _isGameRunning = false;
 
   private _rowResolved$ = new Subject<void>();
+  private _gameOver$ = new Subject<void>();
 
   get rowResolved$(): Observable<void> {
     return this._rowResolved$;
+  }
+
+  get gameOver$(): Observable<void> {
+    return this._gameOver$;
   }
 
   init(): void {
@@ -64,6 +69,12 @@ export class Board implements Initializable, Updatable {
     } else {
       this.resolveFilledLines();
       this.spawnActiveShape();
+
+      // If newly spawned shape cannot move down, game over!
+      if (!canShapeMoveInDirection(this._cells, this._activeShape, Direction.Down)) {
+        this.playPause(false);
+        this._gameOver$.next();
+      }
     }
   }
 
@@ -175,7 +186,7 @@ export class Board implements Initializable, Updatable {
 
   private updateShapeLocation(shape: Shape): boolean {
     if (!canShapeMoveInDirection(this._cells, shape, Direction.Down)) {
-      return;
+      return false;
     }
 
     shape.move(Direction.Down);

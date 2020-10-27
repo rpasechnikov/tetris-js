@@ -26,6 +26,29 @@ $border-thickness: 1px;
     flex-direction: row;
     flex-wrap: wrap;
 
+    #game-over-message {
+      height: $pixel-size * 20;
+      width: $pixel-size * 10;
+
+      display: none;
+
+      backdrop-filter: blur(1px);
+
+      left: 8px + $border-thickness;
+      top: 8px + $border-thickness;
+
+      position: absolute;
+
+      align-items: center;
+      justify-content: center;
+
+      font: 30px bolder;
+
+      &.visible {
+        display: flex;
+      }
+    }
+
     .cell {
       height: $pixel-size - ($border-thickness * 2);
       width: $pixel-size - ($border-thickness * 2);
